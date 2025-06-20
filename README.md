@@ -53,14 +53,6 @@ A secure and scalable backend application for managing patient records with two 
 
 ---
 
-## 🧩 System Architecture
-
-```mermaid
-graph TD
-    A[Client (Postman / curl)] -->|REST API| B[Golang Backend]
-    B --> C[PostgreSQL DB]
-    B --> D[Swagger UI]
-```
 
 ---
 
