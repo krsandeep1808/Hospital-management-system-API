@@ -117,6 +117,164 @@ go run cmd/main.go
 
 ---
 
+## API Endpoints
+
+## 🔐 1. **Login API**
+
+### **POST /login**
+
+Logs in a user (doctor or receptionist) and returns a JWT token.
+
+#### ✅ Request
+
+```http
+POST http://localhost:8080/login
+Content-Type: application/json
+```
+
+```json
+{
+  "email": "reception@example.com",
+  "password": "123456"
+}
+```
+
+#### ✅ Response
+
+```json
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}
+```
+
+---
+
+## 🧑‍💼 2. **Receptionist APIs**
+
+### 🔹 All endpoints below require **JWT token** in headers:
+
+```http
+Authorization: Bearer <your_token_here>
+```
+
+---
+
+### **GET /reception/patients**
+
+Fetches the list of all patients (Receptionist-only access).
+
+#### ✅ Request
+
+```http
+GET http://localhost:8080/reception/patients
+Authorization: Bearer <token>
+```
+
+#### ✅ Response
+
+```json
+[
+  {
+    "name": "John Doe",
+    "age": 30,
+    "gender": "Male",
+    "diagnosis": "Flu"
+  },
+  ...
+]
+```
+
+---
+
+### **POST /reception/patients**
+
+Creates a new patient record (Receptionist-only access).
+
+#### ✅ Request
+
+```http
+POST http://localhost:8080/reception/patients
+Content-Type: application/json
+Authorization: Bearer <token>
+```
+
+```json
+{
+  "name": "Jane Smith",
+  "age": 25,
+  "gender": "Female",
+  "diagnosis": "Cold"
+}
+```
+
+#### ✅ Response
+
+```json
+{
+  "name": "Jane Smith",
+  "age": 25,
+  "gender": "Female",
+  "diagnosis": "Cold"
+}
+```
+
+---
+
+## 🧑‍⚕️ 3. **Doctor APIs**
+
+### **GET /doctor/patients**
+
+Fetches all registered patients for the doctor (Doctor-only access).
+
+#### ✅ Request
+
+```http
+GET http://localhost:8080/doctor/patients
+Authorization: Bearer <token>
+```
+
+#### ✅ Response
+
+```json
+[
+  {
+    "name": "John Doe",
+    "age": 30,
+    "gender": "Male",
+    "diagnosis": "Flu"
+  },
+  ...
+]
+```
+
+> ✅ Doctor cannot add/edit patients — only view.
+
+---
+
+## 🛡️ Authorization Header for All Protected APIs
+
+Make sure to pass this in **every request** (GET or POST after login):
+
+```
+Authorization: Bearer <JWT_TOKEN>
+```
+
+You get this token after logging in via `/login`.
+
+---
+
+## 🧪 Suggested Users (Dummy)
+
+| Email                   | Password | Role         |
+| ----------------------- | -------- | ------------ |
+| `reception@example.com` | `123456` | receptionist |
+| `doctor@example.com`    | `123456` | doctor       |
+
+These are hardcoded in `models/user.go` (mock user list).
+
+----
+
+
 ## 🧪 API Documentation (Swagger)
 
 ### 1. Install swag CLI
